@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
 
-    const SUPER_ADMIN_ROLE = 3;
+    const SUPER_ADMIN_ROLE = 21;
     
     //Add superRole admin to user
     public function addRoleSuperAdminToId($id){
