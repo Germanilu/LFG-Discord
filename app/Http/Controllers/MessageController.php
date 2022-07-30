@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -52,36 +53,35 @@ class MessageController extends Controller
 
 
 
-    // public function getAllTasksByUserId ()
-    // {
-    //     try {
-    //         Log::info('Getting Task');
-    //         //Recupero el user ID
-    //         $userId = auth()->user()->id;
-    //         //El ultimo task de la linea abajo le estoy diciendo de atacar al metodo del modelo user que se llama task
-    //         $tasks = User::find($userId)->tasks;
+    public function getAllMessagesByChannelId ($id)
+    {
+        try {
+            Log::info('Getting All messages');
 
-    //         return response()->json(
-    //             [
-    //                 "success"=> true,
-    //                 "message"=> 'Get all tasks',
-    //                 "data"=> $tasks
-    //             ],200
-    //             );
+            //Recupero los mensajes en el canal 1
+            $messages = Channel::find($id)->message;
+
+            return response()->json(
+                [
+                    "success"=> true,
+                    "message"=> 'Get all Messages',
+                    "data"=> $messages
+                ],200
+                );
 
 
-    //     } catch (\Exception $exception) {
-    //         Log::error('Error Getting All tasks: ' .$exception->getMessage());
+        } catch (\Exception $exception) {
+            Log::error('Error Getting All messages: ' .$exception->getMessage());
 
             
-    //         return response()->json(
-    //             [
-    //                 "success"=> true,
-    //                 "message"=> 'Error Getting tasks'
-    //             ],500
-    //             );
-    //     }
-    // }
+            return response()->json(
+                [
+                    "success"=> true,
+                    "message"=> 'Error Getting Messages'
+                ],500
+                );
+        }
+    }
 
 
 
