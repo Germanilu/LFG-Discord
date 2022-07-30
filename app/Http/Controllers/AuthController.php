@@ -17,14 +17,14 @@ class AuthController extends Controller
     {
 
         
-        //Valido los datos 
+        //Validate all data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:6|max:25',
         ]);
 
-        //Si el validator falla lanza error
+        //If missing data trhow error
         if ($validator->fails()) {
             return response()->json([
                 'success' => true,
@@ -32,17 +32,17 @@ class AuthController extends Controller
             ],);
         }
 
-        //Creo el usuario 
+        //Creating user
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->password)
         ]);
 
-        //Para hacer un attach del userrole
+        //Default attach to user
         $user->roles()->attach(1);
 
-        //Creo el token con encryptados los dastos de $user
+        //Creating token
         $token = JWTAuth::fromUser($user);
         return response()->json(compact('user', 'token'), 201);
     }
@@ -52,13 +52,10 @@ class AuthController extends Controller
     //Login User
     public function login(Request $request)
     {
-        //Requiero por body email y password (la propiedad only recupera solo lo q digo entre parentesis)
+        
         $input = $request->only('email', 'password');
-        //Setea la variable jwt a null
         $jwt_token = null;
-
-
-        //Aqui con el attempt revisa el $input y comprueba la contraseña y el usuario si ambos son validos me genera 1 token para ese usuario git
+        
         if (!$jwt_token = JWTAuth::attempt($input)) {
             return response()->json([
                 'success' => false,
@@ -72,7 +69,7 @@ class AuthController extends Controller
     }
 
 
-    //Get profile
+    //Get profile User
     public function me(){
         return response()->json([
             'success' => true,
@@ -80,7 +77,7 @@ class AuthController extends Controller
         ]);
     }
 
-    //Logout (El logout pasa x el body el token)
+    //Logout User
     public function logout(Request $request)
     {
         $this->validate($request, [
@@ -101,16 +98,14 @@ class AuthController extends Controller
     }
 
 
+    //Edit User Profile
     public function editProfile(Request $request, $id)
     {
         try {
-
             Log::info('Put User');
-
             $validator = Validator::make($request->all(), [
                 'name' => 'string',
                 'email' => 'email'
-                
             ]);
 
             if ($validator->fails()) {

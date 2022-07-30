@@ -13,14 +13,11 @@ class UserController extends Controller
     
     //Add superRole admin to user
     public function addRoleSuperAdminToId($id){
-    
        try {
-        Log::info('Getting contact');
+        Log::info('Convert into superAdmin');
 
         $user = User::query()
                 ->find($id);
-
-        
         $user->roles()->attach(self::SUPER_ADMIN_ROLE);
         
         return response()->json([
@@ -30,28 +27,24 @@ class UserController extends Controller
         ], 200);
 
        } catch (\Exception $exception) {
-        Log::error('Error getting contact by id: ' . $exception->getMessage());
+        Log::error('Error converting into superAdmin: ' . $exception->getMessage());
+
         return response()->json([
             'success' => true,
             'message' => 'Unable to Convert to SuperAdmin',
             'data' => $user
         ], 500);
-
-
        }
     }
-
 
     //Delete superAdmin role to user
     public function deleteRoleSuperAdminToId($id){
     
         try {
-         Log::info('Getting contact');
+         Log::info('Deleting superAdmin role');
  
          $user = User::query()
                  ->find($id);
- 
-         
          $user->roles()->detach(self::SUPER_ADMIN_ROLE);
          
          return response()->json([
@@ -61,14 +54,13 @@ class UserController extends Controller
          ], 200);
  
         } catch (\Exception $exception) {
-         Log::error('Error getting contact by id: ' . $exception->getMessage());
+         Log::error('Error deleting super admin role: ' . $exception->getMessage());
+
          return response()->json([
              'success' => true,
              'message' => 'Unable to Convert into user',
              'data' => $user
          ], 500);
- 
- 
         }
      }
 }

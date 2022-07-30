@@ -9,26 +9,24 @@ use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
 {
+    //Add new message to channel
     public function addMessage($id,Request $request)
     {
         try {
             Log::info('Create Message');
 
-            //Recupero el title por body con $request
+            //Body request
             $message = $request->input('message');
-            //Recupero el userid por el token 
+            //Recover userID by token
             $userId = auth()->user()->id;
             $channel = $id;
 
-            //Conecto la variable con el modelo
             $newMessage = new Message();
-            //Digo que el titulo de newTask es la variable $title
             $newMessage->message = $message;
-            //Digo que el userid de la variable newTask es el $userId
             $newMessage->user_id = $userId;
             $newMessage->channel_id = $channel;
-
             $newMessage->save();
+
             return response()->json(
                 [
                     "success"=> true,
@@ -38,7 +36,6 @@ class MessageController extends Controller
                 );
             
         } catch (\Exception $exception) {
-            
             Log::error('Error creating Message: ' .$exception->getMessage());
 
             return response()->json(
@@ -48,24 +45,36 @@ class MessageController extends Controller
                 ],500
                 );
         }
-        return 'Create Message';
     }
 
 
-
+    //Get all messages by channel id
     public function getAllMessagesByChannelId ($id)
     {
         try {
             Log::info('Getting All messages');
 
-            //Recupero los mensajes en el canal 1
+            //Recover all messages from channel $id
             $messages = Channel::find($id)->message;
+            
+            //To Sort messages by Desc
+            $sorted = $messages->sortByDesc('created_at');
+            $sorted->values()->all();
+
+            if(!$messages){
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'Message not found'
+                    ]
+                );
+            }
 
             return response()->json(
                 [
                     "success"=> true,
                     "message"=> 'Get all Messages',
-                    "data"=> $messages
+                    "data"=> $sorted
                 ],200
                 );
 
@@ -73,7 +82,6 @@ class MessageController extends Controller
         } catch (\Exception $exception) {
             Log::error('Error Getting All messages: ' .$exception->getMessage());
 
-            
             return response()->json(
                 [
                     "success"=> true,
@@ -84,20 +92,28 @@ class MessageController extends Controller
     }
 
 
-
-
+    //Delete message by Id
     public function deleteMessageById($id)
     {
-
         try {
-
             Log::info('Delete Message By id');
 
             $userId = auth()->user()->id;
-
-            //De aqui recupero que este dato pertenece a ese usuario para q lo traiga
             $message = Message::query()->where('user_id', '=', $userId)->find($id);
+
+            //If message doesn't exist..
+            if(!$message){
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'Message doesnt exist'
+                        
+                    ]
+                );
+            }
+
             $message->delete();
+
             return response()->json(
                 [
                     "success" => true,
@@ -108,8 +124,8 @@ class MessageController extends Controller
                 200
             );
         } catch (\Exception $exception) {
-
             Log::error('Error deleting message by id: ' .$exception->getMessage());
+
             return response()->json(
                 [
                     "success" => true,
@@ -120,23 +136,26 @@ class MessageController extends Controller
         }
     }
 
-
+    //Edit message by is ID
     public function modifyMessageById($id, Request $request) {
         try {
             Log::info('Updating message with id: '.$id);
+
             $userId = auth()->user()->id;
             $message = Message::where('user_id','=',$userId)->find($id);
+
             if(!$message){
                 return response()->json(
                     [
                         'success' => false,
                         'message' => 'message not found'
-                        
                     ]
                 );
             }
+
             $message->message = $request->input('message');
             $message->save();
+
             return response()->json(
                 [
                     'success' => true,
@@ -146,6 +165,7 @@ class MessageController extends Controller
             );
         }catch(\Exception $exception){
             Log::error('Error updating message: '.$exception->getMessage());
+            
             return response()->json(
                 [
                     'success' => true,

@@ -23,13 +23,8 @@ Route::get('/', function(){
     return 'Welcome to my API';
 });
 
-
-
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
-
-
-
 
 
 //Aqui creo un grupo con el middleware que controla el token 
@@ -59,7 +54,6 @@ Route::group(
         Route::post('/addChannel/{id}', [ChannelController::class, 'createNewChannel']);
         Route::get('/channel', [ChannelController::class, 'getAllChannels']);
         Route::get('/channel/{id}', [ChannelController::class, 'getChannelById']);
-
         Route::put('/channel/{id}', [ChannelController::class, 'modifyChannelById']);
         Route::delete('/deleteChannel/{id}',[ChannelController::class, 'deleteChannelById']);
     }

@@ -8,7 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class ChannelController extends Controller
-{
+{   
+
+    //Creating new Channel
     public function createNewChannel ($id,Request $request)
     {
         try {
@@ -17,14 +19,23 @@ class ChannelController extends Controller
             $name = $request->input('name');
             $userId = auth()->user()->id;
 
-            //Esta linea es muy dudosa pero x ahora se queda
+            //Getting game id
             $game = $id;
+
+            //Validation name new Channel
+            if(!$name|| $name = ""){
+                return response()->json(
+                    [
+                        "success"=> true,
+                        "message"=> 'Missing Channel Name' 
+                    ],200
+                    );
+            }
 
             $newChannel = new Channel();
             $newChannel->name = $name;
             $newChannel->user_id = $userId;
             $newChannel->game_id = $game;
-
             $newChannel->save();
 
             return response()->json(
@@ -48,6 +59,7 @@ class ChannelController extends Controller
     }
 
 
+    //Get all channel
     public function getAllChannels ()
     {
         try {
@@ -80,7 +92,7 @@ class ChannelController extends Controller
     }
 
 
-
+    //Get channel by id
     public function getChannelById ($id)
     {
         try {
@@ -88,7 +100,6 @@ class ChannelController extends Controller
             Log::info('Getting Channel By id');
 
             $userId = auth()->user()->id;
-            //De aqui recupero que este dato pertenece a ese usuario para q lo traiga
             $channel = Channel::query()->where('user_id' , '=', $userId)->find($id);
             
             if(!$channel){
@@ -111,9 +122,8 @@ class ChannelController extends Controller
                 ],200
                 );
         } catch (\Exception $exception) {
-            Log::error('Error Getting All Channel: ' .$exception->getMessage());
 
-            
+            Log::error('Error Getting All Channel: ' .$exception->getMessage());
             return response()->json(
                 [
                     "success"=> true,
@@ -123,17 +133,14 @@ class ChannelController extends Controller
         }
     }
 
-
+    //Delete channel by id
     public function deleteChannelById($id)
     {
 
         try {
-
             Log::info('Delete channel By id');
 
             $userId = auth()->user()->id;
-
-            //De aqui recupero que este dato pertenece a ese usuario para q lo traiga
             $channel = Channel::query()->where('user_id', '=', $userId)->find($id);
             $channel->delete();
             return response()->json(
@@ -145,9 +152,10 @@ class ChannelController extends Controller
                 ],
                 200
             );
-        } catch (\Exception $exception) {
 
+        } catch (\Exception $exception) {
             Log::error('Error deleting channel by id: ' .$exception->getMessage());
+
             return response()->json(
                 [
                     "success" => true,
@@ -158,12 +166,14 @@ class ChannelController extends Controller
         }
     }
 
-
+    //Edit channel by ID
     public function modifyChannelById($id, Request $request) {
         try {
             Log::info('Updating channel with id: '.$id);
+
             $userId = auth()->user()->id;
             $channel = Channel::where('user_id','=',$userId)->find($id);
+
             if(!$channel){
                 return response()->json(
                     [
@@ -173,8 +183,10 @@ class ChannelController extends Controller
                     ]
                 );
             }
+
             $channel->name = $request->input('name');
             $channel->save();
+
             return response()->json(
                 [
                     'success' => true,
@@ -182,8 +194,10 @@ class ChannelController extends Controller
                     'data'=> $channel
                 ]
             );
+
         }catch(\Exception $exception){
             Log::error('Error updating channel: '.$exception->getMessage());
+
             return response()->json(
                 [
                     'success' => true,
@@ -192,5 +206,4 @@ class ChannelController extends Controller
             );
         }
     }
-
 }
