@@ -39,7 +39,7 @@ Route::group(
 
 //Provide SuperAdmin Powers
 Route::group(
-    ['middleware' => ['jwt.auth']],
+    ['middleware' => ['jwt.auth','is.super.admin']],
     function(){
         Route::post('/addRoleSuperAdmin/{id}', [UserController::class, 'addRoleSuperAdminToId']);
         Route::delete('/deleteRoleSuperAdmin/{id}',[UserController::class, 'deleteRoleSuperAdminToId']);
