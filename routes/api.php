@@ -30,12 +30,15 @@ Route::post('/login',[AuthController::class,'login']);
 
 
 
+
+
 //Aqui creo un grupo con el middleware que controla el token 
 Route::group(
     ['middleware' => 'jwt.auth'],
     function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::get('/logout', [AuthController::class, 'logout']);
+        Route::put('/editProfile/{id}',[AuthController::class,'editProfile']);
     }
 );
 
@@ -78,7 +81,6 @@ Route::group(
     function(){
         Route::post('/addMessage/{id}', [MessageController::class, 'addMessage']);
         Route::get('/message/{id}', [MessageController::class, 'getAllMessagesByChannelId']);
-        
         Route::put('/message/{id}', [MessageController::class, 'modifyMessageById']);
         Route::delete('/deleteMessage/{id}',[MessageController::class, 'deleteMessageById']);
     }

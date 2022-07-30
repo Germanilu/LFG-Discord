@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -96,6 +97,59 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => 'Sorry, the user cannot be logged out'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    public function editProfile(Request $request, $id)
+    {
+        try {
+
+            Log::info('Put User');
+
+            $validator = Validator::make($request->all(), [
+                'name' => 'string',
+                'email' => 'email'
+                
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(
+                    [
+                        "success" => false,
+                        "message" => $validator->errors()
+                    ],
+                    400
+                );
+            };
+
+            $user = User::query()->findOrFail($id);
+            
+            $name =  $request->input('name');
+            $email = $request->input('email');
+
+            if (isset($name)) {
+                $user->name = $name;
+            } else if (isset($email)) {
+                $user->email = $email;
+            }
+
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'PUT New user',
+                'data' => $user
+            ], 200);
+
+            
+        } catch (\Exception $exception) {
+            Log::error('Error Updating contact: ' . $exception->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error Updating Contact'
+            ], 500);
         }
     }
 }
