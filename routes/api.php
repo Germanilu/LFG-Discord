@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChannelController;
+use App\Http\Controllers\ChannelUserController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -57,5 +58,14 @@ Route::group(
 
         Route::put('/channel/{id}', [ChannelController::class, 'modifyChannelById']);
         Route::delete('/deleteChannel/{id}',[ChannelController::class, 'deleteChannelById']);
+    }
+);
+
+//Control Entrance Channel-User
+Route::group(
+    ['middleware' => ['jwt.auth']],
+    function(){
+        Route::post('/addUserToChannel/{id}', [ChannelUserController::class, 'addUserToChannel']);
+        Route::delete('/deleteUserFromChannel/{id}',[ChannelUserController::class, 'deleteUserFromChannel']);
     }
 );

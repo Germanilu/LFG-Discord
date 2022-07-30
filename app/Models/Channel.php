@@ -13,4 +13,9 @@ class Channel extends Model
     {
         return $this->belongsTo(Game::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }
