@@ -18,4 +18,9 @@ class Channel extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function message()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

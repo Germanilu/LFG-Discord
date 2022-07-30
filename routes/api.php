@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\ChannelUserController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -48,7 +49,7 @@ Route::group(
     }
 );
 
-
+//Crud Channel
 Route::group(
     ['middleware' => ['jwt.auth']],
     function(){
@@ -67,5 +68,18 @@ Route::group(
     function(){
         Route::post('/addUserToChannel/{id}', [ChannelUserController::class, 'addUserToChannel']);
         Route::delete('/deleteUserFromChannel/{id}',[ChannelUserController::class, 'deleteUserFromChannel']);
+    }
+);
+
+
+//Crud Message
+Route::group(
+    ['middleware' => ['jwt.auth']],
+    function(){
+        Route::post('/addMessage/{id}', [MessageController::class, 'addMessage']);
+        Route::get('/message', [MessageController::class, 'getAllMessages']);
+        
+        Route::put('/message/{id}', [MessageController::class, 'modifyMessageById']);
+        Route::delete('/deleteMessage/{id}',[MessageController::class, 'deleteMessageById']);
     }
 );
