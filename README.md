@@ -1,3 +1,25 @@
+# Toc
+
+- [Toc](#toc)
+- [LFG Discord](#lfg-discord)
+- [How to use it](#how-to-use-it)
+- [Endpoints](#endpoints)
+    - [Auth](#auth)
+    - [Channel](#channel)
+    - [Message](#message)
+    - [SuperAdmin](#superadmin)
+- [EER Diagram](#eer-diagram)
+  - [Author](#author)
+      - [Luciano Germani :it:](#luciano-germani-it)
+
+
+# LFG Discord
+
+*If you prefer you can read this in* [Spanish](README-ESP.md)
+
+This project, it's a replication of Discord server where you can register a new user, Create a new channel and write messages inside the channel.
+All this project has been made whit Laravel.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
@@ -7,58 +29,76 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# How to use it
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+To be able to use it you will need to install Postman ((https://www.postman.com/) and aim to this heroku server: https://lfd-discord.herokuapp.com/api
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Endpoints
 
-## Laravel Sponsors
+Here you can find all the methods you can use on Postman to be able to do your research
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Auth
 
-### Premium Partners
+POST / register --> You can register a new user
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+POST / login --> You can login 
 
-## Contributing
+GET / me  --> To see your profile
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+PUT / editProfile/id  --> You can edit your profile 
 
-## Code of Conduct
+GET / logout --> You can log out from the App
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+### Channel
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+POST / addChannel/id --> You can add a new channel 
 
-## License
+POST / addUserToChannel/id --> You can add user to channel
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+GET / channel --> You can get all channel
+
+GET / channel/id  --> You can get the channel by is own id
+
+PUT / channel/id  --> You can edit the channel
+
+DELETE / deleteUserFromChannel/id --> You can remove user from channel
+
+DELETE / deleteChannel/id --> You can delete the channel
+
+
+
+### Message
+
+POST / addMessage/id--> You can add a new message to the channel 
+
+GET / message/id --> You can get all the messages by the channel id
+
+PUT / message/id --> You can edit the message
+
+DELETE / deleteMessage/id --> You can delete the message
+
+
+### SuperAdmin
+
+POST / addRoleSuperAdmin/id --> Can add new role to user
+
+DELETE / deleteRoleSuperAdmin/id --> Can remove role from user
+
+
+# EER Diagram
+
+![Diagram](imgReadme/EER%20Diagram.png)
+
+## Author 	
+
+#### [Luciano Germani](https://github.com/Germanilu) :it:
+
+---------------------
+
+[:top:](#toc)
+
