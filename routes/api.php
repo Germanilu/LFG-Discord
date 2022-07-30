@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,5 +44,17 @@ Route::group(
     function(){
         Route::post('/addRoleSuperAdmin/{id}', [UserController::class, 'addRoleSuperAdminToId']);
         Route::delete('/deleteRoleSuperAdmin/{id}',[UserController::class, 'deleteRoleSuperAdminToId']);
+    }
+);
+
+
+Route::group(
+    ['middleware' => ['jwt.auth']],
+    function(){
+        Route::post('/addChannel/{id}', [ChannelController::class, 'createNewChannel']);
+        Route::get('/channel', [ChannelController::class, 'getAllChannels']);
+        Route::get('/channel/{id}', [ChannelController::class, 'getChannelById']);
+        Route::put('/channel/{id}', [ChannelController::class, 'modifyChannelById']);
+        Route::delete('/deleteChannel/{id}',[ChannelController::class, 'deleteChannelById']);
     }
 );
