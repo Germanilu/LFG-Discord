@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,5 +33,15 @@ Route::group(
     function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::get('/logout', [AuthController::class, 'logout']);
+    }
+);
+
+
+//Provide SuperAdmin Powers
+Route::group(
+    ['middleware' => ['jwt.auth']],
+    function(){
+        Route::post('/addRoleSuperAdmin/{id}', [UserController::class, 'addRoleSuperAdminToId']);
+        Route::delete('/deleteRoleSuperAdmin/{id}',[UserController::class, 'deleteRoleSuperAdminToId']);
     }
 );
